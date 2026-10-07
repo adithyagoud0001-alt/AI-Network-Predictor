@@ -1,0 +1,242 @@
+{
+  "model_version": "1.0.0",
+  "timestamp": "2026-10-07T05:50:08.226048+00:00",
+  "champion_model_name": "Random Forest",
+  "classes": [
+    "GOOD",
+    "MODERATE",
+    "POOR"
+  ],
+  "input_features": [
+    "latency",
+    "packet_loss",
+    "jitter",
+    "download_bandwidth",
+    "upload_bandwidth",
+    "traffic_rate",
+    "network_utilization",
+    "latency_rolling_mean",
+    "latency_rolling_std",
+    "packet_loss_rolling_mean",
+    "jitter_rolling_mean",
+    "latency_change_rate",
+    "packet_loss_change_rate",
+    "bandwidth_trend",
+    "traffic_utilization_ratio",
+    "signal_strength_imputed",
+    "signal_strength_missing",
+    "connection_type"
+  ],
+  "validation_comparison": [
+    {
+      "model_name": "Random Forest",
+      "train_duration_sec": 2.81,
+      "cv_macro_f1_mean": 0.994,
+      "cv_macro_f1_std": 0.0034,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_macro_precision": 1.0,
+      "val_macro_recall": 1.0,
+      "val_weighted_f1": 1.0
+    },
+    {
+      "model_name": "Gradient Boosting",
+      "train_duration_sec": 10.09,
+      "cv_macro_f1_mean": 0.9979,
+      "cv_macro_f1_std": 0.0012,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_macro_precision": 1.0,
+      "val_macro_recall": 1.0,
+      "val_weighted_f1": 1.0
+    },
+    {
+      "model_name": "XGBoost",
+      "train_duration_sec": 0.97,
+      "cv_macro_f1_mean": 0.9963,
+      "cv_macro_f1_std": 0.0021,
+      "val_accuracy": 1.0,
+      "val_macro_f1": 1.0,
+      "val_macro_precision": 1.0,
+      "val_macro_recall": 1.0,
+      "val_weighted_f1": 1.0
+    },
+    {
+      "model_name": "Decision Tree",
+      "train_duration_sec": 2.0,
+      "cv_macro_f1_mean": 0.9943,
+      "cv_macro_f1_std": 0.0029,
+      "val_accuracy": 0.9967,
+      "val_macro_f1": 0.9956,
+      "val_macro_precision": 0.9951,
+      "val_macro_recall": 0.9962,
+      "val_weighted_f1": 0.9967
+    },
+    {
+      "model_name": "Logistic Regression",
+      "train_duration_sec": 2.89,
+      "cv_macro_f1_mean": 0.9295,
+      "cv_macro_f1_std": 0.0062,
+      "val_accuracy": 0.9456,
+      "val_macro_f1": 0.9299,
+      "val_macro_precision": 0.9295,
+      "val_macro_recall": 0.9316,
+      "val_weighted_f1": 0.9456
+    }
+  ],
+  "champion_test_metrics": {
+    "accuracy": 0.9911,
+    "macro_precision": 0.9875,
+    "macro_recall": 0.9894,
+    "macro_f1": 0.9883,
+    "weighted_f1": 0.9911,
+    "confusion_matrix": [
+      [
+        437,
+        0,
+        0
+      ],
+      [
+        0,
+        201,
+        1
+      ],
+      [
+        0,
+        7,
+        254
+      ]
+    ],
+    "classes": [
+      "GOOD",
+      "MODERATE",
+      "POOR"
+    ],
+    "classification_report": {
+      "GOOD": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 437.0
+      },
+      "MODERATE": {
+        "precision": 0.9663461538461539,
+        "recall": 0.995049504950495,
+        "f1-score": 0.9804878048780488,
+        "support": 202.0
+      },
+      "POOR": {
+        "precision": 0.996078431372549,
+        "recall": 0.9731800766283525,
+        "f1-score": 0.9844961240310077,
+        "support": 261.0
+      },
+      "accuracy": 0.9911111111111112,
+      "macro avg": {
+        "precision": 0.9874748617395676,
+        "recall": 0.9894098605262824,
+        "f1-score": 0.9883279763030188,
+        "support": 900.0
+      },
+      "weighted avg": {
+        "precision": 0.9913093262946204,
+        "recall": 0.9911111111111112,
+        "f1-score": 0.9911244721749543,
+        "support": 900.0
+      }
+    }
+  },
+  "global_feature_importances": [
+    {
+      "feature": "jitter",
+      "importance": 0.3112,
+      "importance_pct": 31.12
+    },
+    {
+      "feature": "packet_loss",
+      "importance": 0.1541,
+      "importance_pct": 15.41
+    },
+    {
+      "feature": "traffic_rate",
+      "importance": 0.1235,
+      "importance_pct": 12.35
+    },
+    {
+      "feature": "latency",
+      "importance": 0.0875,
+      "importance_pct": 8.75
+    },
+    {
+      "feature": "upload_bandwidth",
+      "importance": 0.0709,
+      "importance_pct": 7.09
+    },
+    {
+      "feature": "download_bandwidth",
+      "importance": 0.0679,
+      "importance_pct": 6.79
+    },
+    {
+      "feature": "network_utilization",
+      "importance": 0.0456,
+      "importance_pct": 4.56
+    },
+    {
+      "feature": "packet_loss_change_rate",
+      "importance": 0.0377,
+      "importance_pct": 3.77
+    },
+    {
+      "feature": "traffic_utilization_ratio",
+      "importance": 0.0369,
+      "importance_pct": 3.69
+    },
+    {
+      "feature": "signal_strength_imputed",
+      "importance": 0.0329,
+      "importance_pct": 3.29
+    },
+    {
+      "feature": "bandwidth_trend",
+      "importance": 0.0066,
+      "importance_pct": 0.66
+    },
+    {
+      "feature": "latency_change_rate",
+      "importance": 0.0062,
+      "importance_pct": 0.62
+    },
+    {
+      "feature": "packet_loss_rolling_mean",
+      "importance": 0.0046,
+      "importance_pct": 0.46
+    },
+    {
+      "feature": "jitter_rolling_mean",
+      "importance": 0.0041,
+      "importance_pct": 0.41
+    },
+    {
+      "feature": "latency_rolling_std",
+      "importance": 0.0033,
+      "importance_pct": 0.33
+    },
+    {
+      "feature": "latency_rolling_mean",
+      "importance": 0.0032,
+      "importance_pct": 0.32
+    },
+    {
+      "feature": "connection_type",
+      "importance": 0.0024,
+      "importance_pct": 0.24
+    },
+    {
+      "feature": "signal_strength_missing",
+      "importance": 0.0015,
+      "importance_pct": 0.15
+    }
+  ],
+  "pipeline_file": "champion_pipeline.joblib"
+}
