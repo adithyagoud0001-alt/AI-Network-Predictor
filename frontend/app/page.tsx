@@ -19,6 +19,7 @@ import {
   WebSocketTelemetryMessage,
 } from "@/types/network";
 import { API_BASE, WS_BASE } from "@/lib/config";
+import { generateSimulatedTelemetry } from "@/lib/simulator";
 
 export default function DashboardPage() {
   const [telemetry, setTelemetry] = useState<NetworkTelemetry | null>(null);
@@ -30,12 +31,14 @@ export default function DashboardPage() {
   const [selectedInterface, setSelectedInterface] = useState<string>("");
   const [isMonitoring, setIsMonitoring] = useState<boolean>(true);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [isDemoMode, setIsDemoMode] = useState<boolean>(false);
   const [modelMetadata, setModelMetadata] = useState<ModelMetadata | null>(null);
   const [isModelModalOpen, setIsModelModalOpen] = useState<boolean>(false);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const wsRef = useRef<WebSocket | null>(null);
+  const simTickRef = useRef<number>(0);
 
   // 1. Fetch initial interfaces and model metadata
   useEffect(() => {
@@ -74,6 +77,7 @@ export default function DashboardPage() {
         setTelemetry(telem);
         setHistory((prev) => [...prev.slice(-30), telem]);
         setServerError(null);
+        setIsDemoMode(false);
       }
 
       if (predRes.ok) {
@@ -90,7 +94,19 @@ export default function DashboardPage() {
         setAlerts(alertData.active_alerts || []);
       }
     } catch (err) {
-      setServerError("Connecting to backend telemetry daemon (http://localhost:8000)...");
+      // Backend not running (e.g. running standalone on Vercel)
+      // Gracefully switch to simulated telemetry so the dashboard remains 100% interactive!
+      setIsDemoMode(true);
+      simTickRef.current += 1;
+      const sim = generateSimulatedTelemetry(simTickRef.current);
+      setTelemetry(sim.telemetry);
+      setPrediction(sim.prediction);
+      setHistory((prev) => [...prev.slice(-30), sim.telemetry]);
+      setStabilityHistory((prev) => [
+        ...prev.slice(-30),
+        { timestamp: sim.telemetry.timestamp, score: sim.prediction.stability_score },
+      ]);
+      setServerError(null);
     }
   }, []);
 
@@ -217,11 +233,19 @@ export default function DashboardPage() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-8 space-y-6">
-        {/* Backend Connection Warning if Offline */}
-        {serverError && (
-          <div className="bg-amber-950/40 border border-amber-500/40 rounded-xl p-3 text-xs text-amber-300 flex items-center justify-between">
-            <span>{serverError}</span>
-            <span className="font-mono text-[11px] text-amber-400/80">Retrying connection...</span>
+        {/* Cloud Demo Mode Notification Banner (Active when no cloud/local backend is connected) */}
+        {isDemoMode && (
+          <div className="bg-blue-950/30 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+              <span className="font-semibold">Cloud Simulation Active:</span>
+              <span className="text-blue-300/80">
+                Displaying real-time simulated network telemetry. Start your local backend (run_backend.bat) or set NEXT_PUBLIC_API_URL to bind to physical network adapters.
+              </span>
+            </div>
+            <span className="text-[11px] font-mono text-cyan-400/80 bg-blue-900/40 px-2 py-0.5 rounded border border-blue-500/30 self-start sm:self-auto">
+              Client-Side QoS Engine
+            </span>
           </div>
         )}
 
